@@ -1,21 +1,22 @@
 import { Readable} from 'node: stream'
 
 class OneToHundredStream extends Readable {
+  index = 1
+
   _read() {
     const i = this.index++
 
-    if (i > 100 ) {
-      this.push(null)
-
-    } else {
-      //this.push(i) // Dentros de streams nunca vao consequiser ler dados em formatos primitivos: numeros. Normalmente a leitura é feita através dos buffers.
-
-      const buff = Buffer.from(String(i))
-
-      this.push(buff)
-    }
-
+    setTimeout(() => {
+      if (i > 100 ) {
+        this.push(null)
+  
+      } else {
+        const buff = Buffer.from(String(i))
+  
+        this.push(buff)
+      }
+    },1000)
   }
 }
 
-new  OneToHundredStream().pipe(process.stdout)
+new  OneToHundredStream().pipe(process.stdout).pipe(process.stdout)
